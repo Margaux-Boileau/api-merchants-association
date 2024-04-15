@@ -1,0 +1,21 @@
+GET http://127.0.0.1:8000/forums/1/posts/
+Content-Type: application/json
+
+###
+
+POST http://127.0.0.1:8000/forums/1/posts/
+Content-Type: application/json
+
+{
+    "title": "test",
+    "date": "test",
+    "body": "test",
+    "media_names": ["AAAAAAA.jpg", "BBBBBB.jpg"],
+    "media_contents": ["AAAAAAA.jpg", "BBBBBB.jpg"],
+    "id_creator": 2
+}
+
+###
+
+DELETE http://127.0.0.1:8000/forums/1/posts/
+Content-Type: application/json

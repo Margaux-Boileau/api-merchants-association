@@ -1,0 +1,59 @@
+[
+{"USER": {
+    "username": "u",
+    "token": "",
+    "owner": true
+}},
+
+{"EMPLOYEES": ["worker1", "worker2"]},
+
+{"SHOP": {
+    "name": "Central Perk Coffee",
+    "address": "205 Newbury Street Boston, MA 02116",
+    "schedule": "7AM - 7PM",
+    "phone": "857 991 161",
+    "sector": "coffe",
+    "image": "images/centralperkcoffee"
+}},
+
+{"FORUMS": ["General", "Tiendas", "Anuncios"]},
+
+{"FORUM": {
+    "title": "General",
+    "image": "example.com",
+    "date": "04/04/2024",
+    "numOfMenmbers": 30,
+    "readMembers": ["Central Perk Coffee"],
+    "readWriteMembers": ["Tech Staff"]
+}},
+
+{"POSTS": [
+        {
+            "title": "Post title",
+            "body": "Post body",
+            "media": [],
+            "date": "21-03-2024",
+            "creator": "Shop Name",
+            "numComments": 2
+        }
+    ],
+    "pagination": {
+        "results": 200,
+        "page": 1,
+        "pageSize": 20,
+        "pages": 10
+    }
+},
+
+{
+    "COMMENTS": [
+        {
+        "creator": "Shop Name", 
+        "content": "Comment example"
+        }, {
+        "creator": "Shop Name", 
+        "content": "Comment example"
+        }
+    ]
+}
+]

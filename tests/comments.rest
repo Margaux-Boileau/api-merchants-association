@@ -1,0 +1,11 @@
+POST http://127.0.0.1:8000/forums/1/posts/1/comment
+Content-Type: application/json
+
+{
+    "creator": "Shop Name", 
+    "content": "Comment example",
+    "date":"09/04/2024"
+}
+
+DELETE http://127.0.0.1:8000/forums/1/posts/1/comment/1
+Content-Type: application/json

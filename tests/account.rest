@@ -1,0 +1,25 @@
+POST http://127.0.0.1:8000/accounts/register/
+Content-Type: application/json
+
+{ "username": "test", "password": "test", "is_owner_of_shop":"false"}
+
+###
+
+POST http://127.0.0.1:8000/accounts/login/ 
+Content-Type: application/json
+
+{ "username": "test", "password": "test" }
+
+###
+
+GET http://127.0.0.1:8000/accounts/test
+Content-Type: application/json
+Authorization: token c02d7f8af8e252f5ec69cba2f9c76b8be62fd20d
+
+###
+
+POST http://127.0.0.1:8000/accounts/qwerty/changepassword/
+Content-Type: application/json
+Authorization: token ae1c5b7051b1319e014a906dc5ab1090bd462eee
+
+{ "username": "qwerty", "password": "1234" }
