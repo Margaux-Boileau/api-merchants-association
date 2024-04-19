@@ -7,13 +7,14 @@ from rest_framework.authtoken.models import Token
 
 
 class MyAccountManager(BaseUserManager):
-    def create_user(self, username, password=None, is_owner_of_shop=False):
+    def create_user(self, username, password=None, is_owner_of_shop=False, shop_working_at=None):
         if not username:
             raise ValueError('Users must have a username')
 
         user = self.model(
             username=username,
             is_owner_of_shop=is_owner_of_shop,
+            shop_working_at=shop_working_at,
         )
 
         user.set_password(password)
@@ -35,7 +36,8 @@ class MyAccountManager(BaseUserManager):
 
 class Account(AbstractBaseUser):
     username = models.CharField(max_length=30, unique=True)
-    is_owner_of_shop = models.BooleanField()
+    shop_working_at = models.ForeignKey('shops.Shop', on_delete=models.DO_NOTHING, null=True, blank=True)
+    is_owner_of_shop = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
 

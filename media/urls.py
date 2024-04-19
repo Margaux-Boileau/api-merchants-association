@@ -1,7 +1,7 @@
 from django.urls import path
-from .views import MediaListAPIView, MediaDetailAPIView
+from .views import get_post_media_view
 
 urlpatterns = [
-    path('media/', MediaListAPIView.as_view(), name='media-list'),
-    path('media/<int:pk>/', MediaDetailAPIView.as_view(), name='media-detail'),
+    path('forums/<int:forum_pk>/posts/<int:post_pk>/media/<str:media_pk>/', get_post_media_view, name='get_post_media_view'),
+
 ]

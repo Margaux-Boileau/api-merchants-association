@@ -1,9 +1,9 @@
-GET http://127.0.0.1:8000/forums/all
+GET http://127.0.0.1:8000/forums/all/
 Content-Type: application/json
 
 ###
 
-GET http://127.0.0.1:8000/forums/1
+GET http://127.0.0.1:8000/forums/1/
 Content-Type: application/json
 
 ###
@@ -13,8 +13,6 @@ Content-Type: application/json
 
 {
     "title": "test",
-    "date": "test",
-    "body": "test",
-    "media": ["test1.jpg", "test2.jpg"],
-    "id_creator": 1
+    "read_members": "test",
+    "read_write_members": ["test1.jpg", "test2.jpg"],
 }

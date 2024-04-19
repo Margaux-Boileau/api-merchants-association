@@ -11,18 +11,22 @@ from .serializers import AccountSerializer, RegisterSerializer
 
 
 @api_view(['POST', ])
+@permission_classes([IsAuthenticated, ])
 def register_view(request):
-    if request.method == 'POST':
-        serializer = RegisterSerializer(data=request.data)
-        if serializer.is_valid():
-            user = serializer.save()
-            token, _ = Token.objects.get_or_create(user=user)
-            return Response({
-                'user': AccountSerializer(user).data,
-                'token': token.key
-            }, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+    user = request.user
+    if user.is_admin or user.is_owner_of_shop:
+        if request.method == 'POST':
+            serializer = RegisterSerializer(data=request.data, context={'request': request})
+            if serializer.is_valid():
+                new_user = serializer.save()
+                token, _ = Token.objects.get_or_create(user=new_user)
+                return Response({
+                    'user': AccountSerializer(new_user).data,
+                    'token': token.key
+                }, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response({"error": "You do not have permission."}, status=status.HTTP_403_FORBIDDEN)
 
 @api_view(['POST', ])
 def login_view(request):
