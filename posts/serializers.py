@@ -9,7 +9,6 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = ['id', 'creator', 'content', 'date']
 
 class PostSerializer(serializers.ModelSerializer):
-    media = MediaSerializer(many=True, read_only=True)
     comments = CommentSerializer(many=True, read_only=True)
     class Meta:
         model = Post

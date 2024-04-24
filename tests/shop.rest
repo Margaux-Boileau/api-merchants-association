@@ -19,7 +19,7 @@ Content-Type: application/json
 
 ###
 
-GET http://127.0.0.1:8000/shops/1
+GET http://127.0.0.1:8000/shops/5
 Content-Type: application/json
 
 ###
@@ -38,13 +38,13 @@ Authorization: token c02d7f8af8e252f5ec69cba2f9c76b8be62fd20d
 
 ###
 
-GET http://127.0.0.1:8000/shops/1/employees/
+GET http://127.0.0.1:8000/shops/5/employees/
 Content-Type: application/json
 Authorization: token c02d7f8af8e252f5ec69cba2f9c76b8be62fd20d
 
 ###
 
-POST http://127.0.0.1:8000/shops/1/employees/
+POST http://127.0.0.1:8000/shops/6/employees/
 Content-Type: application/json
 Authorization: token c02d7f8af8e252f5ec69cba2f9c76b8be62fd20d
 
@@ -60,5 +60,5 @@ Authorization: token c02d7f8af8e252f5ec69cba2f9c76b8be62fd20d
 
 ###
 
-GET http://127.0.0.1:8000/shops/1/forums
+GET http://127.0.0.1:8000/shops/5/forums/
 Content-Type: application/json

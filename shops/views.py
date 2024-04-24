@@ -1,3 +1,5 @@
+from django.http import FileResponse
+from forums.serializers import SimpleForumSerializer
 from .serializers import ShopSerializer, UpdateShopSerializer
 from django.db.models import Q
 from .models import Shop
@@ -48,7 +50,7 @@ class ShopListView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-# /shops/<pk>
+# /shops/<pk>/
 class ShopDetailView(APIView):
     def dispatch(self, request, *args, **kwargs):
         if request.method == 'PUT':
@@ -152,7 +154,7 @@ class ShopEmployeesView(APIView):
         else:
             return Response({"error": "You do not have permission to modify workers in this shop."}, status=status.HTTP_403_FORBIDDEN)
 
-# /shops/<pk>/forums
+# /shops/<pk>/forums/
 @api_view(['GET'])
 def get_shop_forums_view(request, pk):
     try:
@@ -160,6 +162,21 @@ def get_shop_forums_view(request, pk):
     except Shop.DoesNotExist:
         return Response({"error": "Shop not found."}, status=status.HTTP_404_NOT_FOUND)
     
-    forums = Forum.objects.filter(id__in=pk)
-    forums_names = [forum.title for forum in forums]
-    return Response(forums_names, status=status.HTTP_200_OK)
+    forums = Forum.objects.filter(read_members=shop)
+    serializers = SimpleForumSerializer(forums, many=True)
+    return Response(serializers.data, status=status.HTTP_200_OK)
+
+# /shops/<pk>/image/
+@api_view(['GET'])
+def get_shop_image_view(request, pk):
+    try:
+        shop = Shop.objects.get(pk=pk)
+    except Shop.DoesNotExist:
+        return Response({"error": "Shop not found."}, status=status.HTTP_404_NOT_FOUND)
+
+    media = shop.image.id
+    img = open('uploads/' + media, 'rb')
+
+    response = FileResponse(img)
+
+    return response

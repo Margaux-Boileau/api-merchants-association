@@ -14,12 +14,18 @@ from .serializers import AccountSerializer, RegisterSerializer
 @permission_classes([IsAuthenticated, ])
 def register_view(request):
     user = request.user
-    if user.is_admin or user.is_owner_of_shop:
+    if user.is_admin or user.is_owner_of_shop:        
         if request.method == 'POST':
             serializer = RegisterSerializer(data=request.data, context={'request': request})
             if serializer.is_valid():
                 new_user = serializer.save()
                 token, _ = Token.objects.get_or_create(user=new_user)
+                try:
+                    shop = Shop.objects.get(id=user.shop_working_at.id)
+                    shop.workers.add(new_user)
+                    shop.save()
+                except:
+                    pass                
                 return Response({
                     'user': AccountSerializer(new_user).data,
                     'token': token.key

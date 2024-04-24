@@ -5,3 +5,8 @@ class ForumSerializer(serializers.ModelSerializer):
     class Meta:
         model = Forum
         fields = ['id','title', 'date', 'read_members', 'read_write_members', 'posts']
+
+class SimpleForumSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Forum
+        fields = ['id','title', 'date']

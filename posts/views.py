@@ -1,7 +1,7 @@
 import base64
 from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist
-from shops.models import Shop
+from django.http import FileResponse
 from .models import Post
 from media.models import Media
 from forums.models import Forum
@@ -23,6 +23,7 @@ class PostListView(APIView):
             self.permission_classes = []
 
         return super().dispatch(request, *args, **kwargs)
+    
     def get(self, request, forum_pk):
         try:
             forum = Forum.objects.get(pk=forum_pk)
@@ -32,12 +33,6 @@ class PostListView(APIView):
         posts = Post.objects.filter(forum=forum)
         serializer = PostSerializer(posts, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
-
-
-        if len(media_names)!=len(media_contents): 
-            return Response({"error": "Number of image names and content do not match"}, status=status.HTTP_400_BAD_REQUEST)
-
     
     def post(self, request, forum_pk):
         try:
@@ -67,7 +62,6 @@ class PostListView(APIView):
             media = Media(id=name)
             media_objects.append(media)
 
-        # Usamos bulk_create para crear los medios
         Media.objects.bulk_create(media_objects)
 
         post = Post.objects.create(
@@ -84,9 +78,34 @@ class PostListView(APIView):
 # /forums/<pk_forum>/posts/<pk_post>
 class PostDetailView(APIView):
     def get(self, request):
+        # AÑADIR EL DELETE Y PUT
         pass
 
 # /forums/<pk_forum>/posts/<pk_post>/comments/
 class CommentsListView(APIView):
     def get(self, request):
         pass
+
+# /forums/<pk_forum>/posts/<pk_post>/media/<pk_media/
+@api_view(['GET'])
+def get_post_media(request, forum_pk, post_pk, media_pk):
+    try:
+        forum = Forum.objects.get(pk=forum_pk)
+        post = Post.objects.get(pk=post_pk)
+        media = Media.objects.get(pk=media_pk)
+    except ObjectDoesNotExist:
+        return Response({"error": "Object does not exist."}, status=status.HTTP_404_NOT_FOUND)
+    
+    if post not in forum.posts.all():
+        return Response({"error": "Post does not belong to this forum."}, status=status.HTTP_404_NOT_FOUND)
+    
+    if media not in post.media.all():
+        return Response({"error": "Post does not belong to this forum."}, status=status.HTTP_404_NOT_FOUND)
+    
+    media_name = media.id
+    print(media_name)
+    img = open('uploads/'+media_name, 'rb')
+
+    response = FileResponse(img)
+
+    return response
