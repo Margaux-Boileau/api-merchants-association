@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 
-# forums/<int:forum_pk>/posts/<int:post_pk>/media/<str:media_pk>
+# forums/<int:forum_pk>/posts/<int:post_pk>/media/<str:media_pk>/
 @permission_classes([IsAuthenticated])
 @api_view(['GET'])
 def get_post_media_view(request, forum_pk, post_pk, media_pk):

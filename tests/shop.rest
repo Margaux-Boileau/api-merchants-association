@@ -48,15 +48,15 @@ POST http://127.0.0.1:8000/shops/6/employees/
 Content-Type: application/json
 Authorization: token c02d7f8af8e252f5ec69cba2f9c76b8be62fd20d
 
-{"worker": "test2"}
+{"worker": "ooo"}
 
 ###
 
-DELETE  http://127.0.0.1:8000/shops/1/employees/
+DELETE  http://127.0.0.1:8000/shops/5/employees/
 Content-Type: application/json
 Authorization: token c02d7f8af8e252f5ec69cba2f9c76b8be62fd20d
 
-{"worker": "test2"}
+{"worker": "ooo"}
 
 ###
 
