@@ -1,4 +1,6 @@
 import base64
+import os
+import uuid
 from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import FileResponse
@@ -14,7 +16,7 @@ from rest_framework import status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 
-# /forums/<pk_forum>/posts/
+# /forums/<forum_pk>/posts/
 class PostListView(APIView):
     def dispatch(self, request, *args, **kwargs):
         if request.method == 'POST':
@@ -45,43 +47,44 @@ class PostListView(APIView):
             return Response({"error": "You do not have permission to post in this forum."}, status=status.HTTP_403_FORBIDDEN)
 
         data = request.data
-        media_names = data.get('media_names', [])
-        media_contents = data.get('media_contents', [])
-
-        if len(media_names) != len(media_contents):
-            return Response({"error": "Mismatch between media names and contents."}, status=status.HTTP_400_BAD_REQUEST)
-
-        media_objects = []
-        for name, content in zip(media_names, media_contents):
-            if Media.objects.filter(Q(id=name)).exists():
-                return Response({"error": f"Media with name '{name}' already exists."}, status=status.HTTP_400_BAD_REQUEST)
-
-            image_data = base64.b64decode(content)
-            with open(f'uploads/{name}', 'wb') as f:
-                f.write(image_data)
-            media = Media(id=name)
-            media_objects.append(media)
-
-        Media.objects.bulk_create(media_objects)
+        medias = data.get('medias', [])
 
         post = Post.objects.create(
             title=data.get('title'),
             body=data.get('body'),
             id_creator=user.shop_working_at,
-        )
-        post.media.add(*media_objects)
+        )        
         
+        media_objects = []
+        for media in medias:
+            decoded = base64.b64decode(media)
+
+            media_name = f'uploads/{uuid.uuid4()}.jpg'
+
+            with open(media_name, 'wb') as f:
+                f.write(decoded)
+            
+            media_obj = Media.objects.create(id=media_name)
+            media_objects.append(media_obj)
+        
+        post.media.add(*media_objects)        
         forum.posts.add(post)
 
         return Response(status=status.HTTP_201_CREATED)
 
-# /forums/<pk_forum>/posts/<pk_post>
+# /forums/<forum_pk>/posts/<post_pk>
 class PostDetailView(APIView):
-    def get(self, request):
-        # AÑADIR EL DELETE Y PUT
-        pass
+    def get(self, request, forum_pk, post_pk):
+        try:
+            post = Post.objects.get(pk=post_pk)
+        except Post.DoesNotExist:
+            return Response({"error": "Post does not exist"}, status=status.HTTP_404_NOT_FOUND)
 
-# /forums/<pk_forum>/posts/<pk_post>/comments/
+        serializer = PostSerializer(post)
+        
+        return Response(serializer.data)
+
+# /forums/<forum_pk>/posts/<post_pk>/comments/
 class CommentsListView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -120,7 +123,7 @@ class CommentsListView(APIView):
                 creator=user.shop_working_at,
                 content=data.get('content'))
             post.comments.add(comment)
-            return Response(status=status.HTTP_201_CREATED)
+            return Response({"message": "Comment created sucessfully"} ,status=status.HTTP_201_CREATED)
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
@@ -141,7 +144,7 @@ def delete_comment(request, comment_pk):
     comment.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
 
-# /forums/<pk_forum>/posts/<pk_post>/media/<pk_media/
+# /forums/<forum_pk>/posts/<post_pk>/media/<media_pk/
 @api_view(['GET'])
 def get_post_media(request, forum_pk, post_pk, media_pk):
     try:

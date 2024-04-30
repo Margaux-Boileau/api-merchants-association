@@ -1,6 +1,6 @@
-POST http://127.0.0.1:8000/forums/5/posts/5/comments/
+POST http://127.0.0.1:8000/forums/7/posts/27/comments/
 Content-Type: application/json
-Authorization: token 48d2d139f6da2cb8ccb433799639ec2f157dc6cd
+Authorization: token c9b638f0f902cfe2a25d057fad309c721f975c78
 
 {
     "content": "Comment example"

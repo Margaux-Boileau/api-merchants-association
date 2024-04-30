@@ -1,3 +1,4 @@
+import uuid
 from django.http import FileResponse
 from forums.serializers import SimpleForumSerializer
 from .serializers import ShopSerializer, UpdateShopSerializer
@@ -30,19 +31,19 @@ class ShopListView(APIView):
     
     def post(self, request):
         data = request.data
-        image_name = data.get('image', None)
-        image_content = data.get('image_content', None)      
-
-        if image_name:         
-            if Media.objects.filter(Q(id=image_name)).exists():
-                return Response({"error": f"Media with name '{image_name}' already exists."}, status=status.HTTP_400_BAD_REQUEST)
-            if image_content:
-                media_instance = Media.objects.create(id=image_name)
-                image_data = base64.b64decode(image_content)
-                with open(f'uploads/{image_name}', 'wb') as f:
-                    f.write(image_data)
+        media = data.get('image', None)  
         
-        data.pop('image_content', None)
+        if media:
+            decoded = base64.b64decode(media)
+
+            media_name = f'uploads/{uuid.uuid4()}.jpg'
+
+            with open(media_name, 'wb') as f:
+                f.write(decoded)
+            
+            media_obj = Media.objects.create(id=media_name)
+
+            data['image'] = media_name
 
         serializer = ShopSerializer(data=data)
         if serializer.is_valid():
