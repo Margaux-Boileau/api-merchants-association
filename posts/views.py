@@ -1,6 +1,7 @@
 import base64
 import os
 import uuid
+from rest_framework.pagination import PageNumberPagination
 from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import FileResponse
@@ -27,14 +28,20 @@ class PostListView(APIView):
         return super().dispatch(request, *args, **kwargs)
     
     def get(self, request, forum_pk):
+        itemsPerPage = self.request.query_params.get('itemsPerPage')
+        page = self.request.query_params.get('page')
+        print(page)
+
         try:
             forum = Forum.objects.get(pk=forum_pk)
         except Forum.DoesNotExist:
             return Response({"error": "Forum does not exist"}, status=status.HTTP_404_NOT_FOUND)
 
         posts = Post.objects.filter(forum=forum)
-        serializer = PostSerializer(posts, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        pagination = PageNumberPagination()
+        page = pagination.paginate_queryset(posts, request)
+        serializer = PostSerializer(page, many=True)
+        return pagination.get_paginated_response(serializer.data)
     
     def post(self, request, forum_pk):
         try:
@@ -57,6 +64,8 @@ class PostListView(APIView):
         
         media_objects = []
         for media in medias:
+            print('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
+            print(media)
             decoded = base64.b64decode(media)
 
             media_name = f'uploads/{uuid.uuid4()}.jpg'
@@ -97,10 +106,12 @@ class CommentsListView(APIView):
         
         if post not in forum.posts.all():
             return Response({"error": "Post does not belong to this forum."}, status=status.HTTP_404_NOT_FOUND)
-        
+
         comments = post.comments.all()
-        serializer = CommentSerializer(comments, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        pagination = PageNumberPagination()
+        page = pagination.paginate_queryset(comments, request)
+        serializer = CommentSerializer(page, many=True)
+        return pagination.get_paginated_response(serializer.data)
     
     def post(self, request, forum_pk, post_pk):
         user = request.user
