@@ -8,7 +8,8 @@ from shops.models import Shop
 from shops.serializers import ShopSerializer
 from .models import Account
 from .serializers import AccountSerializer, RegisterSerializer
-
+from fcm_django.models import FCMDevice
+from firebase_admin.messaging import Message, Notification
 
 @api_view(['POST', ])
 @permission_classes([IsAuthenticated, ])
@@ -84,3 +85,25 @@ def account_change_password_view(request, username):
             return Response({"error": "New password is required."}, status=status.HTTP_400_BAD_REQUEST)
     else:
         return Response({"error": "You do not have permission to change the password for this user."}, status=status.HTTP_403_FORBIDDEN)
+
+@api_view(['POST', ])
+@permission_classes([IsAuthenticated])
+def store_fcm_token_view(request):
+    data = request.data
+    fcm_token = data.get('fcm_token')
+    
+    # Define the defaults dictionary with the fields to update or create
+    defaults = {
+        'name': data.get('device_name'),
+        'device_id': data.get('device_id'),
+        'type': data.get('platform_type'),
+    }
+
+    # Update or create the FCMDevice object based on user and registration_id
+    device, created = FCMDevice.objects.update_or_create(
+        user=request.user,
+        registration_id=fcm_token,
+        defaults=defaults
+    )
+
+    return Response({"message": "Token stored successfully."}, status=status.HTTP_200_OK)

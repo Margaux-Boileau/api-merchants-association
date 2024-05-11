@@ -2,20 +2,20 @@ POST http://127.0.0.1:8000/accounts/register/
 Content-Type: application/json
 Authorization: token 44d39786cca1a13c89432a6ea0db14f54d5e6780
 
-{ "username": "perona", "password": "1234"}
+{ "username": "test", "password": "test"}
 
 ###
 
 POST http://127.0.0.1:8000/accounts/login/ 
 Content-Type: application/json
 
-{ "username": "admin", "password": "admin" }
+{ "username": "test", "password": "test" }
 
 ###
 
 GET http://127.0.0.1:8000/accounts/test/
 Content-Type: application/json
-Authorization: token c02d7f8af8e252f5ec69cba2f9c76b8be62fd20d
+Authorization: token c9b638f0f902cfe2a25d057fad309c721f975c78
 
 ###
 
@@ -24,3 +24,16 @@ Content-Type: application/json
 Authorization: token 9ed6c1788659b78dfdece859d302fbefc78370e7
 
 { "username": "test", "password": "1234" }
+
+###
+
+POST http://127.0.0.1:8000/fcm-token/
+Content-Type: application/json
+Authorization: token c9b638f0f902cfe2a25d057fad309c721f975c78
+
+{    
+    "fcm_token": "dweL9LynSGC8xEcUsh97_H:APA91bFjFCnDFYOHBaIQFZ3xI1Cr5zg8A-cX3lQs6P1vLG7-rHyJo6o5AZvvfybtjynUixXoKYuD8hK8sc-EzrkQWWOzIMygzitd5VBrZI6Xn57dsyE2eBMVo1RSXSTH0gp7Zue17PMS",
+    "device_name": "Pixel 4",
+    "device_id": "38400000-8cf0-11bd-b23e-10b96e40000d",
+    "platform_type": "android"
+}

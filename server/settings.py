@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+import firebase_admin
+from firebase_admin import credentials
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -40,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
+    'fcm_django',
     'media',
     'shops',
     'forums',
@@ -139,3 +142,39 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Initialize Firebase SDK with service account credentials
+cred = credentials.Certificate("./server/firebase/app-merchants-association-firebase-adminsdk-79gh2-ecbf1f1a3f.json")
+firebase_admin.initialize_app(cred)
+
+# FIREBASE FCM
+{
+  "type": "service_account",
+  "project_id": "app-merchants-association",
+
+  "private_key_id": "ecbf1f1a3f044acb7c3ccfcc7a7b9cb0d906c503",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCsvKdppy35Z0bs\nmafrx+/ltwoktBae1ujtJPol/crYxHRvZ2okQT1npBb+GrM7mX3iWzF1kKfzl2mT\nIvb53AOq4PTVAqQvf2P+ygG84rNGpFh+jX1zhL+NzkCSM9RtSBWVGeujwmNUaXkI\n2XyIgUBmSxFqj7PBFjeC1U/H1iXiHcGPGK7+y05SyKE0Buxibg8s5Fkxzh1o6Was\nRIf9zIE2qr0RZpA60cB/IQixttD60bX403Yue7e5WUN4oryJrGVprCTdP06tYRi3\n5li2chvAe4XisYbkcKIkEeE5D7YzvAs7e4N+dgPXYAGPxYTRqEd0+v7wk9Fa4poK\nB7rUidB9AgMBAAECggEACffvfmFQ6HrNZO6Uz6klFEqXpINwZxVrxvG9GOUC/YxQ\nKYoG3gBA1lgUdptyWqm9PMtP+PhSj57I5N5Im/tBNULlsNxF6YgjwcAFJnzRD+4r\nPY8V8rfHY9wyWELy9aU1D6V5to82Mxh3d8CwrI0EUH2btpyuk4xKwvtjRFr8qoY+\nLnB5ZrIz8gNLRa4wIjVZEKgO0km8E9DiUp2wu4pDytjYLgTjmOBn6V6OXslzcYas\nRefwtmNicXtT3gruXjbmpjNWihUUU7ucXDrCan9p/CqPPbdsgGkv6EI1Sc/on3O1\nQoef0lWHQT3yhlUUIjZGZXWZC5C0qdyzSMmlh58xYQKBgQDpayekSnjdbIOxHjO0\nU0R2qImCFey5L42PVRM3rh5f7+9ke2DImoCDVFMJx3gqDsf88M9iW0gNauei2e//\nyVMADL/qWwlDuPfiFNjXi9AzL32rVTZvGMWm3LIMZLCnsZxD4bpFi5G5LMovOKZL\nTtgOE4hIlvJfGvwZMB90XVKL4QKBgQC9cqhFhNxBLSrGMx0pzoWpGaSJXm+ifkGK\ncpDTUmS9Y9yvnP7RKGibAMXbZqTeAo2aX/HOGIqJZwNVye+chD87jx0sSGAVONvN\nWqWsWzoJlMjk/G6hGvfQSLEr9YIJ4wNudfLsZj3UpWS5do+9mEmtLxD+ZHo+zuCF\nHceyMG74HQKBgQDc2JSmPgwDPCORlgjHia0SM73+xa23PQXL4muPV//HN6WhxZY5\n1uzW1RbH/uFzsY6IhHNDFSikAUzuaRNJSPtt5aJDIyUt3TkzwBO2RMOVWk6lp7cc\nAC0qBk+zqCT4VPSLyWvLVxVmRbl6WjgEsrF7CAH+5Eqnr0lsr3pjR9TNIQKBgC96\nFIGXkjsjPpz9Iknf389JBdsHN6LZUUOJApJzC5wK8rtv9Mwl/FEcGHmrd5XLvgD6\nGncz30Qf9M4DFXF8EvyyGPWIDcxDu5HzLaHMGvdbuhzoxjDJuWERVpVVqYkgwzNj\ni8WCuewYpu1zsQIqsAwex3t5YslqvwmdNPaK/MRhAoGAP9dcJSKpc48w8VX/f57Z\nz1LLUMYT3sJj2gggv8NOVVV0+cHagXORKIf5UYrjhdyRb/1lrWmu4CrpBmjD7N7p\nyXbN2RfPyxxYuV13VivhxTiJGYF0yhaFuImgMp9GjLgCpWAa0AGQnwmXkgQbW5su\ntSmWJOqV/gwMfCOxragFpCk=\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-79gh2@app-merchants-association.iam.gserviceaccount.com",
+  "client_id": "103264586301125714419",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-79gh2%40app-merchants-association.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
+
+FCM_DJANGO_SETTINGS = {
+     # an instance of firebase_admin.App to be used as default for all fcm-django requests
+     # default: None (the default Firebase app)
+    "DEFAULT_FIREBASE_APP": None,
+     # default: _('FCM Django')
+    "APP_VERBOSE_NAME": "[string for AppConfig's verbose_name]",
+     # true if you want to have only one active device per registered user at a time
+     # default: False
+    "ONE_DEVICE_PER_USER": True,
+     # devices to which notifications cannot be sent,
+     # are deleted upon receiving error response from FCM
+     # default: False
+    "DELETE_INACTIVE_DEVICES": False,
+}

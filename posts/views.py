@@ -1,5 +1,4 @@
 import base64
-import os
 import uuid
 from rest_framework.pagination import PageNumberPagination
 from django.db.models import Q
@@ -16,6 +15,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
+from fcm_django.models import FCMDevice
+from firebase_admin.messaging import Message, Notification
 
 # /forums/<forum_pk>/posts/
 class PostListView(APIView):
@@ -37,7 +38,7 @@ class PostListView(APIView):
         except Forum.DoesNotExist:
             return Response({"error": "Forum does not exist"}, status=status.HTTP_404_NOT_FOUND)
 
-        posts = Post.objects.filter(forum=forum)
+        posts = Post.objects.filter(forum=forum).order_by('-id')
         pagination = PageNumberPagination()
         page = pagination.paginate_queryset(posts, request)
         serializer = PostSerializer(page, many=True)
@@ -64,13 +65,12 @@ class PostListView(APIView):
         
         media_objects = []
         for media in medias:
-            print('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
-            print(media)
+            #print(media)
             decoded = base64.b64decode(media)
 
-            media_name = f'uploads/{uuid.uuid4()}.jpg'
+            media_name = f'{uuid.uuid4()}.jpg'
 
-            with open(media_name, 'wb') as f:
+            with open(f'uploads/{media_name}', 'wb') as f:
                 f.write(decoded)
             
             media_obj = Media.objects.create(id=media_name)
@@ -78,6 +78,14 @@ class PostListView(APIView):
         
         post.media.add(*media_objects)        
         forum.posts.add(post)
+
+        for shop in forum.read_members.all():
+            for worker in shop.workers.all():
+                device = FCMDevice.objects.filter(user=worker)
+                message = Message(
+                notification=Notification(title="Nuevo post", body=f"Se ha publicado un nuevo post en el foro ${forum.title}", image="url")
+                )  # Optionally add a topic parameter
+                device.send_message(message)
 
         return Response(status=status.HTTP_201_CREATED)
 
@@ -107,7 +115,7 @@ class CommentsListView(APIView):
         if post not in forum.posts.all():
             return Response({"error": "Post does not belong to this forum."}, status=status.HTTP_404_NOT_FOUND)
 
-        comments = post.comments.all()
+        comments = post.comments.all().order_by('-id')
         pagination = PageNumberPagination()
         page = pagination.paginate_queryset(comments, request)
         serializer = CommentSerializer(page, many=True)

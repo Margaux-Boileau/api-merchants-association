@@ -23,16 +23,20 @@ Content-Type: application/json
 
 ###
 
-PUT http://127.0.0.1:8000/shops/1
+PUT http://127.0.0.1:8000/shops/11/
 Content-Type: application/json
-Authorization: token c02d7f8af8e252f5ec69cba2f9c76b8be62fd20d
+Authorization: token c9b638f0f902cfe2a25d057fad309c721f975c78
 
 {
-  "name": "NEW NAME TEST",
-  "address": "test",
-  "schedule": "test",
-  "phone": "test",
-  "sector": "test"
+  "name": "AAAAAA",
+  "bio": "Esto es una breve descripción de la tomatera",
+  "address": "Calle de los tomates",
+  "schedule": "12/12/2022",
+  "phone": "666444888",
+  "instagram": "AAAAAA",
+  "facebook": "AAAA",
+  "webpage": "AAAA",
+  "mail": "AAAA"
 }
 
 ###

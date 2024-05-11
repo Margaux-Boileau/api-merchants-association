@@ -76,12 +76,14 @@ class ShopDetailView(APIView):
         try:
             shop = Shop.objects.get(pk=pk)
         except Shop.DoesNotExist:
-            return Response({"error": "Shop not found."}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"error": "Shop not found"}, status=status.HTTP_404_NOT_FOUND)
         
         user = request.user
-        
+        print(request.data)
         if user in shop.workers.all() and user.is_owner_of_shop:
+            
             serializer = UpdateShopSerializer(shop, data=request.data, partial=True)
+            print(serializer)
             if serializer.is_valid():
                 serializer.save()
                 updated_shop = Shop.objects.get(pk=pk)
