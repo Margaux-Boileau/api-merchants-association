@@ -9,12 +9,14 @@ from rest_framework import status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 
+# PERMISSIONS: basic auth
 @api_view(['GET'])
 def forum_get_all_view(request):
     forums = Forum.objects.all()
     forums_names = [forum.title for forum in forums]
     return Response(forums_names, status=status.HTTP_200_OK)
 
+# PERMISSIONS: basic auth
 @api_view(['GET'])
 def forum_detail_view(request, pk):
     try:
@@ -25,6 +27,7 @@ def forum_detail_view(request, pk):
     serializer = ForumSerializer(forum)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
+# PERMISSIONS: admin
 @api_view(['POST'])
 def forum_post_view(request):
     pass

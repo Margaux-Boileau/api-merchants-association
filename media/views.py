@@ -8,6 +8,14 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 
+@api_view(['GET'])
+def get_logo(request):
+    img = open('uploads/logo.jpg', 'rb')
+
+    response = FileResponse(img)
+    
+    return response
+
 # forums/<int:forum_pk>/posts/<int:post_pk>/media/<str:media_pk>/
 @permission_classes([IsAuthenticated])
 @api_view(['GET'])

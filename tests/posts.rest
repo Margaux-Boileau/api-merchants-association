@@ -11,7 +11,7 @@ Content-Type: application/json
 
 POST http://127.0.0.1:8000/forums/7/posts/
 Content-Type: application/json
-Authorization: token c9b638f0f902cfe2a25d057fad309c721f975c78
+Authorization: token 60d4696a6d5cfeef37273bcd83025c128e3ecf98
 
 {
     "title": "test",

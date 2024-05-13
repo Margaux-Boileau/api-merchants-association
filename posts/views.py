@@ -19,6 +19,7 @@ from fcm_django.models import FCMDevice
 from firebase_admin.messaging import Message, Notification
 
 # /forums/<forum_pk>/posts/
+
 class PostListView(APIView):
     def dispatch(self, request, *args, **kwargs):
         if request.method == 'POST':
@@ -28,6 +29,7 @@ class PostListView(APIView):
 
         return super().dispatch(request, *args, **kwargs)
     
+    # PERMISSIONS: read-members of forum
     def get(self, request, forum_pk):
         itemsPerPage = self.request.query_params.get('itemsPerPage')
         page = self.request.query_params.get('page')
@@ -44,6 +46,7 @@ class PostListView(APIView):
         serializer = PostSerializer(page, many=True)
         return pagination.get_paginated_response(serializer.data)
     
+    # PERMISIIONS: write members
     def post(self, request, forum_pk):
         try:
             forum = Forum.objects.get(pk=forum_pk)
@@ -83,14 +86,15 @@ class PostListView(APIView):
             for worker in shop.workers.all():
                 device = FCMDevice.objects.filter(user=worker)
                 message = Message(
-                notification=Notification(title="Nuevo post", body=f"Se ha publicado un nuevo post en el foro ${forum.title}", image="url")
-                )  # Optionally add a topic parameter
+                notification=Notification(title="Nuevo post", body=f"Se ha publicado un nuevo post en el foro {forum.title}", image="http://172.23.6.211:8000/media/logo/")
+                )
                 device.send_message(message)
 
         return Response(status=status.HTTP_201_CREATED)
 
 # /forums/<forum_pk>/posts/<post_pk>
 class PostDetailView(APIView):
+    # PERMISSIONS: read-members of forum
     def get(self, request, forum_pk, post_pk):
         try:
             post = Post.objects.get(pk=post_pk)
@@ -105,6 +109,7 @@ class PostDetailView(APIView):
 class CommentsListView(APIView):
     permission_classes = [IsAuthenticated]
 
+    # PERMISSIONS: read-members of forum
     def get(self, request, forum_pk, post_pk):
         try:
             forum = Forum.objects.get(pk=forum_pk)
@@ -121,6 +126,7 @@ class CommentsListView(APIView):
         serializer = CommentSerializer(page, many=True)
         return pagination.get_paginated_response(serializer.data)
     
+    # PERMISSIONS: read-members of forum
     def post(self, request, forum_pk, post_pk):
         user = request.user
         data = request.data
@@ -146,6 +152,7 @@ class CommentsListView(APIView):
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
+# PERMISSIONS: owner of comment
 # /comments/<pk_comment/
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated, ])
@@ -163,6 +170,7 @@ def delete_comment(request, comment_pk):
     comment.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
 
+# PERMISSIONS: read-members of forum
 # /forums/<forum_pk>/posts/<post_pk>/media/<media_pk/
 @api_view(['GET'])
 def get_post_media(request, forum_pk, post_pk, media_pk):

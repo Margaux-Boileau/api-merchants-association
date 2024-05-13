@@ -23,12 +23,14 @@ class ShopListView(APIView):
             self.permission_classes = []
 
         return super().dispatch(request, *args, **kwargs)
-
+    
+    # PERMISIONS: all
     def get(self, request):
         shops = Shop.objects.all()
         serializer = ShopSerializer(shops, many=True)
         return Response(serializer.data)
     
+    # PERMISSIONS: admin
     def post(self, request):
         data = request.data
         media = data.get('image', None)  
@@ -61,6 +63,7 @@ class ShopDetailView(APIView):
 
         return super().dispatch(request, *args, **kwargs)
     
+    # PERMISIONS: all
     def get(self, request, pk):
         try:
             shop = Shop.objects.get(pk=pk)
@@ -72,6 +75,7 @@ class ShopDetailView(APIView):
 
         return Response(serializer.data)
     
+    # PERMISIONS: owner shop
     def put(self, request, pk):
         try:
             shop = Shop.objects.get(pk=pk)
@@ -94,6 +98,7 @@ class ShopDetailView(APIView):
             return Response({"error": "You do not have permission to update this shop."}, status=status.HTTP_403_FORBIDDEN)
 
 # /shops/<pk>/employees/
+# PERMISIONS: owner shop
 class ShopEmployeesView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -158,6 +163,7 @@ class ShopEmployeesView(APIView):
             return Response({"error": "You do not have permission to modify workers in this shop."}, status=status.HTTP_403_FORBIDDEN)
 
 # /shops/<pk>/forums/
+# PERMISIONS: employees shop
 @api_view(['GET'])
 def get_shop_forums_view(request, pk):
     try:
@@ -170,6 +176,7 @@ def get_shop_forums_view(request, pk):
     return Response(serializers.data, status=status.HTTP_200_OK)
 
 # /shops/<pk>/image/
+# PERMISIONS: all
 @api_view(['GET'])
 def get_shop_image_view(request, pk):
     try:

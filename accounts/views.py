@@ -91,19 +91,20 @@ def account_change_password_view(request, username):
 def store_fcm_token_view(request):
     data = request.data
     fcm_token = data.get('fcm_token')
-    
-    # Define the defaults dictionary with the fields to update or create
-    defaults = {
-        'name': data.get('device_name'),
-        'device_id': data.get('device_id'),
-        'type': data.get('platform_type'),
-    }
+    user = request.user
 
-    # Update or create the FCMDevice object based on user and registration_id
-    device, created = FCMDevice.objects.update_or_create(
-        user=request.user,
-        registration_id=fcm_token,
-        defaults=defaults
-    )
+    # Use get_or_create to fetch or create the device
+    device, created = FCMDevice.objects.get_or_create(user=user)
 
-    return Response({"message": "Token stored successfully."}, status=status.HTTP_200_OK)
+    # Update the device information
+    device.registration_id = fcm_token
+    device.name = data.get('device_name')
+    device.device_id = data.get('device_id')
+    device.type = data.get('platform_type')
+    device.save()
+
+    # Response based on whether the device was created or updated
+    if created:
+        return Response({"message": "Token stored successfully."}, status=status.HTTP_200_OK)
+    else:
+        return Response({"message": "Token updated successfully."}, status=status.HTTP_200_OK)
