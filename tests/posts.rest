@@ -1,17 +1,12 @@
 GET http://127.0.0.1:8000/forums/7/posts/?page=1
 Content-Type: application/json
-Authorization: token 44d39786cca1a13c89432a6ea0db14f54d5e6780
-
-###
-
-GET http://127.0.0.1:8000/forums/7/posts/28/
-Content-Type: application/json
+Authorization: token c9b638f0f902cfe2a25d057fad309c721f975c78
 
 ###
 
 POST http://127.0.0.1:8000/forums/7/posts/
 Content-Type: application/json
-Authorization: token 60d4696a6d5cfeef37273bcd83025c128e3ecf98
+Authorization: token c9b638f0f902cfe2a25d057fad309c721f975c78
 
 {
     "title": "test",
@@ -21,6 +16,18 @@ Authorization: token 60d4696a6d5cfeef37273bcd83025c128e3ecf98
 
 ###
 
-DELETE http://127.0.0.1:8000/forums/1/posts/1
+GET http://127.0.0.1:8000/forums/7/posts/240/
 Content-Type: application/json
-Authorization: token c02d7f8af8e252f5ec69cba2f9c76b8be62fd20d
+Authorization: token c9b638f0f902cfe2a25d057fad309c721f975c78
+
+###
+
+DELETE http://127.0.0.1:8000/forums/7/posts/240/
+Content-Type: application/json
+Authorization: token c9b638f0f902cfe2a25d057fad309c721f975c78
+
+###
+
+GET http://127.0.0.1:8000/forums/10/posts/242/media/arbol.jpg/
+Content-Type: application/json
+Authorization: token c9b638f0f902cfe2a25d057fad309c721f975c78

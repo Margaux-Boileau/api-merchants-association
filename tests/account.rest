@@ -1,15 +1,15 @@
 POST http://127.0.0.1:8000/accounts/register/
 Content-Type: application/json
-Authorization: token 44d39786cca1a13c89432a6ea0db14f54d5e6780
+Authorization: token c9b638f0f902cfe2a25d057fad309c721f975c78
 
-{ "username": "new", "password": "new"}
+{ "username": "nnn", "password": "nnn"}
 
 ###
 
 POST http://127.0.0.1:8000/accounts/login/ 
 Content-Type: application/json
 
-{ "username": "test", "password": "test" }
+{ "username": "nnn", "password": "nnn" }
 
 ###
 

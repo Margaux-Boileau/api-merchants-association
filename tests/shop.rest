@@ -5,9 +5,11 @@ Content-Type: application/json
 
 POST http://127.0.0.1:8000/shops/
 Content-Type: application/json
+Authorization: token c9b638f0f902cfe2a25d057fad309c721f975c78
 
 {
   "name": "test",
+  "bio": "test",
   "address": "test",
   "schedule": "test",
   "phone": "test",
@@ -18,8 +20,9 @@ Content-Type: application/json
 
 ###
 
-GET http://127.0.0.1:8000/shops/5
+GET http://127.0.0.1:8000/shops/11/
 Content-Type: application/json
+Authorization: token ebe6d37784d41d39cbf8cebac824455d2a38b7ed
 
 ###
 
@@ -33,35 +36,40 @@ Authorization: token c9b638f0f902cfe2a25d057fad309c721f975c78
   "address": "Calle de los tomates",
   "schedule": "12/12/2022",
   "phone": "666444888",
-  "instagram": "AAAAAA",
-  "facebook": "AAAA",
-  "webpage": "AAAA",
+  "instagram": "http://example.com",
+  "facebook": "http://example.com",
+  "webpage": "http://example.com",
   "mail": "AAAA"
 }
 
 ###
 
-GET http://127.0.0.1:8000/shops/5/employees/
+GET http://127.0.0.1:8000/shops/11/employees/
 Content-Type: application/json
-Authorization: token c02d7f8af8e252f5ec69cba2f9c76b8be62fd20d
+Authorization: token c9b638f0f902cfe2a25d057fad309c721f975c78
 
 ###
 
-POST http://127.0.0.1:8000/shops/6/employees/
+POST http://127.0.0.1:8000/shops/11/employees/
 Content-Type: application/json
-Authorization: token c02d7f8af8e252f5ec69cba2f9c76b8be62fd20d
+Authorization: token c9b638f0f902cfe2a25d057fad309c721f975c78
 
-{"worker": "ooo"}
+{"worker": "rrr"}
 
 ###
 
-DELETE  http://127.0.0.1:8000/shops/5/employees/
+DELETE  http://127.0.0.1:8000/shops/11/employees/
 Content-Type: application/json
-Authorization: token c02d7f8af8e252f5ec69cba2f9c76b8be62fd20d
+Authorization: token c9b638f0f902cfe2a25d057fad309c721f975c78
 
-{"worker": "ooo"}
+{"worker": "rrr"}
 
 ###
 
-GET http://127.0.0.1:8000/shops/5/forums/
+GET http://127.0.0.1:8000/shops/11/forums/
 Content-Type: application/json
+Authorization: token ebe6d37784d41d39cbf8cebac824455d2a38b7ed
+
+###
+
+GET http://127.0.0.1:8000/shops/11/image/
