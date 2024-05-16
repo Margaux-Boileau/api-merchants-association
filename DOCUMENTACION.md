@@ -6,6 +6,8 @@ La idea principal del proyecto es crear una app con la que los integrantes de la
 
 La app también tiene implementado un sistema de gestión de usuarios para que el dueño de la tienda pueda registrar a sus empleados para que ellos también tengan acceso a la app y a los foros.
 
+[**Vídeo Demo**](https://drive.google.com/file/d/1ayF2J8Dt34cIKMQJ-hLnnz1CwsGN4eta/view?usp=sharing)
+
 ## Arquitectura
 
 La aplicación está desarrollada en Flutter, la api rest que us en Django y la base de datos en Sqlite. La api y la bdd están en una ec2 de AWS.  
