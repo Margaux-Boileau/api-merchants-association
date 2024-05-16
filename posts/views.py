@@ -88,7 +88,11 @@ class PostListView(APIView):
                 message = Message(
                 notification=Notification(title="Nuevo post", body=f"Se ha publicado un nuevo post en el foro {forum.title}", image="http://172.23.6.211:8000/media/logo/")
                 )
-                device.send_message(message)
+                try:
+                    device.send_message(message)
+                except Exception as e:
+                    # Manejo de la excepción
+                    print(f"Error al enviar el mensaje a {worker.username}: {e}")
 
         return Response({"message": "Post created successfully."}, status=status.HTTP_201_CREATED)
 
@@ -221,6 +225,7 @@ def delete_comment(request, comment_pk):
 # URL: /forums/<forum_pk>/posts/<post_pk>/media/<media_pk/
 # PERMISSIONS: read members of forum
 @api_view(['GET'])
+@permission_classes([IsAuthenticated, ])
 def get_post_media(request, forum_pk, post_pk, media_pk):
     try:
         forum = Forum.objects.get(pk=forum_pk)
@@ -250,6 +255,11 @@ def get_post_media(request, forum_pk, post_pk, media_pk):
         return Response({"error": "Media does not belong to this post."}, status=status.HTTP_404_NOT_FOUND)
     
     media_name = media.id
-    img = open('uploads/'+media_name, 'rb')
-    response = FileResponse(img)
-    return response 
+    with open('uploads/'+media_name, 'rb') as img_file:
+        img_data = img_file.read()
+        img_base64 = base64.b64encode(img_data).decode('utf-8')
+
+    return Response({"image" :img_base64},  status=status.HTTP_200_OK)
+    #img = open('uploads/'+media_name, 'rb')
+    #response = FileResponse(img)
+    #return response 

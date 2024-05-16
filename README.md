@@ -1,3 +1,45 @@
-# Api amb Django per als comerciants de l'associació de Sants de Creu coberta
-## [Link al document de les reunions 'daily'](https://docs.google.com/document/d/1zI_hmcGqmSW9f7VDPBhu5CrNaKiX6EYcbxGyyrRqMms/edit?usp=drive_link)
-## [Link al vídeo de la demo 1](https://drive.google.com/file/d/1a2-2fYGBAlG_Kf2jA3iJ-jDS3jjFYrkf/view?usp=sharing)
+# Forum API for a Merchants Association
+
+¡Bienvenido/a a la API REST de Foros para la Asociación de Comerciantes! Esta API proporciona un conjunto de endpoints para la gestión de un sistema de foros destinado a la comunicación entre los miembros de la asociación.
+
+## Features
+
+- Utiliza Django REST Framework para proporcionar una API RESTful.
+- Usa SQLite como base de datos.
+- Implementa autenticación mediante tokens para proteger los endpoints.
+- Utiliza Firebase Cloud Messaging para enviar notificaciones cuando se publica un nuevo post en el foro.
+
+## Instalación
+
+1. Clona este repositorio en tu máquina local:
+
+```bash
+git clone https://github.com/Margaux-Boileau/api-merchants-association.git
+```
+
+2. Instala las dependencias del proyecto:
+
+```bash
+pip install -r requirements.txt
+```
+
+3. Ejecuta las migraciones de la base de datos:
+
+```bash
+python manage.py makemigrations
+python manage.py migrate
+```
+
+4. Inicia el servidor de desarrollo:
+
+```bash
+python manage.py runserver
+```
+
+La API estará disponible en `http://localhost:8000/`.  
+
+El panel de administrador se puede acceder a  `http://localhost:8000/admin/`.
+
+## Autores
+
+Desarrollado por [Margaux Boileau](https://github.com/Margaux-Boileau), [Óscar Perona Gómez](https://github.com/peronaOscar), [Lorenzo Poderoso Dalmau](https://github.com/LorenzoDalmaau)
